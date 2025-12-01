@@ -1,0 +1,38 @@
+trigger:
+  branches:
+    include: [ main ]
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  imageName: 'app-devops-pratica'
+  imageTag: '$(Build.BuildId)'
+
+steps:
+- task: AzureCLI@2
+  displayName: 'Login no ACR'
+  inputs:
+    azureSubscription: 'SC-Azure-ARM'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      ACR_NAME=$(acrName)
+      az acr login --name $ACR_NAME
+      echo "Logged into ACR: $ACR_NAME"
+
+- task: Bash@3
+  displayName: 'Build da imagem Docker'
+  inputs:
+    targetType: 'inline'
+    script: |
+      ACR_SERVER=$(acrLoginServer)
+      docker build -t $ACR_SERVER/$(imageName):$(imageTag) .
+      docker push $ACR_SERVER/$(imageName):$(imageTag)
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publicar metadata da imagem'
+  inputs:
+    PathtoPublish: '$(System.DefaultWorkingDirectory)/'
+    ArtifactName: 'image-info'
+    publishLocation: 'Container'
