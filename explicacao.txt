@@ -1,0 +1,5 @@
+O repositório do github é: https://github.com/Brenoviniicius/projeto-devops
+
+Eu não consigo mais criar contas na azure porque já criei inumeras e perdir o free tier de todas.
+
+Enviei o .zip com todo o projeto no github
