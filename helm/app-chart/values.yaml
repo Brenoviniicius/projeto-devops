@@ -1,0 +1,11 @@
+image:
+  repository: <acrLoginServer>/app-devops-pratica
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8080
+
+resources: {}
